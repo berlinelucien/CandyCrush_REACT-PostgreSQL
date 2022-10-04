@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from "react";
+import Scoreboard from "../components/Scoreboard";
 import { useState } from "react";
 import blank from "../images/blank.png";
 import blueCandy from "../images/blue-candy.png";
@@ -27,6 +28,7 @@ const CrushBoard = () => {
   const [currentColorArrangement, setCurrentColorArrangement] = useState([]);
   const [squareBeingDragged, setSquareBeingDragged] = useState(null);
   const [squareBeingReplaced, setSquareBeingReplaced] = useState(null);
+  // set the score
   const [scoreDisplay, setScoreDisplay] = useState(0);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -42,6 +44,10 @@ const CrushBoard = () => {
             currentColorArrangement[square] === decidedColor && !isBlank
         )
       ) {
+          //if we get a match, set the score
+          // use a callback function
+          //whatever the score add 4 points
+          //example of callback function passing data scope of parent to child
         setScoreDisplay((score) => score + 4);
         columnOfFour.forEach(
           (square) => (currentColorArrangement[square] = blank)
@@ -68,6 +74,10 @@ const CrushBoard = () => {
             currentColorArrangement[square] === decidedColor && !isBlank
         )
       ) {
+          //if we get a match, set the score
+          // use a callback function
+          //whatever the score add 4 points
+          //example of callback function passing data scope of parent to child
         setScoreDisplay((score) => score + 4);
         rowOfFour.forEach(
           (square) => (currentColorArrangement[square] = blank)
@@ -94,6 +104,9 @@ const CrushBoard = () => {
             currentColorArrangement[square] === decidedColor && !isBlank
         )
       ) {
+          //if we get a match, set the score
+          // use a callback function
+          //whatever the score add 3 points
         setScoreDisplay((score) => score + 3);
         columnOfThree.forEach(
           (square) => (currentColorArrangement[square] = blank)
@@ -120,6 +133,9 @@ const CrushBoard = () => {
             currentColorArrangement[square] === decidedColor && !isBlank
         )
       ) {
+          //if we get a match, set the score
+          // use a callback function
+          //whatever the score add 3 points
         setScoreDisplay((score) => score + 3);
         rowOfThree.forEach(
           (square) => (currentColorArrangement[square] = blank)
@@ -148,19 +164,79 @@ const CrushBoard = () => {
       }
     }
   };
+    console.log("scoreDisplay here",scoreDisplay);
 
   // drag and drop functions
-    // drag start picks up the id of the square
-    const dragStart = (e) => {
-        console.log('start drag')
-      setSquareBeingDragged(e.target)
+  // dov ref: https://www.w3schools.com/jsref/event_ondrag.asp
+  // doc ref: https://www.w3schools.com/jsref/event_ondragend.asp
+  // drag start picks up the id of the square
+  const dragStart = (e) => {
+    console.log("start drag");
+    setSquareBeingDragged(e.target);
   };
-    const dragDrop = (e) => {
-        console.log('drag drop')
-      setSquareBeingReplaced(e.target)
+  const dragDrop = (e) => {
+    console.log("drag drop");
+    setSquareBeingReplaced(e.target);
   };
-    const dragEnd = (e) => {
-      
+  const dragEnd = (e) => {
+    // save the square id that being dragged...paresInt to get the number and not a string
+    const squareBeingDraggedId = parseInt(
+      squareBeingDragged.getAttribute("data-id")
+    );
+    console.log("squareBeingDraggedId", squareBeingDraggedId);
+
+    // save the square id that being replaced to var called squareBeingReplacedId
+    const squareBeingReplacedId = parseInt(
+      squareBeingReplaced.getAttribute("data-id")
+    );
+    console.log("squareBeingReplacedId", squareBeingReplacedId);
+
+    // switch out the color
+    // switch get current color arrangement and get the number which is the squareReplacedId and set it to the being dragged color by grabbing the src color/(background color) instead of id
+    currentColorArrangement[squareBeingReplacedId] =
+      squareBeingDragged.getAttribute("src");
+    currentColorArrangement[squareBeingDraggedId] =
+      squareBeingReplaced.getAttribute("src");
+
+    // valid moves is either one up, one down, one left, one right
+    // create array for valid move
+    const validMoves = [
+      squareBeingDraggedId - 1,
+      squareBeingDraggedId - width,
+      squareBeingDraggedId + 1,
+      squareBeingDraggedId + width,
+    ];
+
+    // valid move condition: the array if it include square being replaced id
+    // then its a valid move
+    // ex: squareid (38) - 8(width) = 30 === valid move
+    const validMove = validMoves.includes(squareBeingReplacedId);
+
+    //checking should return true == saving the boolean
+    const isAColumnOfFour = checkForColumnOfFour();
+    const isARowOfFour = checkForRowOfFour();
+    const isAColumnOfThree = checkForColumnOf_Three();
+    const isARowOfThree = checkForRowOfThree();
+
+    // if the squared being replacedid exist and is a valid move and if either
+    // is a row of three or row of four or col.four or col of three
+    // if all that is true then everything is good, drop the candy
+    if (
+      squareBeingReplacedId &&
+      validMove &&
+      (isARowOfThree || isARowOfFour || isAColumnOfFour || isAColumnOfThree)
+    ) {
+      //set board to null to start over
+      setSquareBeingDragged(null);
+      setSquareBeingReplaced(null);
+    } else {
+      //else change it back not valid
+      currentColorArrangement[squareBeingReplacedId] =
+        squareBeingReplaced.getAttribute("src");
+      currentColorArrangement[squareBeingDraggedId] =
+        squareBeingDragged.getAttribute("src");
+      setCurrentColorArrangement([...currentColorArrangement]);
+    }
   };
 
   // create the board with the colors
@@ -191,8 +267,8 @@ const CrushBoard = () => {
       checkForColumnOf_Three();
       checkForRowOfThree();
       setCurrentColorArrangement([...currentColorArrangement]);
-    }, 100)
-    return () => clearInterval(timer)
+    }, 100);
+    return () => clearInterval(timer);
   }, [
     checkForColumnOfFour,
     checkForRowOfFour,
@@ -217,11 +293,13 @@ const CrushBoard = () => {
             onDragOver={(e) => e.preventDefault()}
             onDragEnter={(e) => e.preventDefault()}
             onDragLeave={(e) => e.preventDefault()}
-            onDrag={dragDrop}
+            onDrop={dragDrop}
             onDragEnd={dragEnd}
           />
         ))}
-      </div>
+          </div>
+          {/** scoreboard component  */}
+          <Scoreboard score={scoreDisplay } />
     </div>
   );
 };
