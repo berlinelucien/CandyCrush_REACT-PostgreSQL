@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from "react";
-import Scoreboard from "../components/Scoreboard";
+import Scoreboard from "./Scoreboard";
 import { useState } from "react";
 import blank from "../images/blank.png";
 import blueCandy from "../images/blue-candy.png";
@@ -36,6 +36,7 @@ const CrushBoard = () => {
     for (let i = 0; i <= 39; i++) {
       const columnOfFour = [i, i + width, i + width * 2, i + width * 3];
       const decidedColor = currentColorArrangement[i];
+      //do not count blank as matches , do not add to score
       const isBlank = currentColorArrangement[i] === blank;
 
       if (
@@ -44,10 +45,10 @@ const CrushBoard = () => {
             currentColorArrangement[square] === decidedColor && !isBlank
         )
       ) {
-          //if we get a match, set the score
-          // use a callback function
-          //whatever the score add 4 points
-          //example of callback function passing data scope of parent to child
+        //if we get a match, set the score
+        // use a callback function
+        //whatever the score add 4 points
+        //example of callback function passing data scope of parent to child
         setScoreDisplay((score) => score + 4);
         columnOfFour.forEach(
           (square) => (currentColorArrangement[square] = blank)
@@ -74,10 +75,10 @@ const CrushBoard = () => {
             currentColorArrangement[square] === decidedColor && !isBlank
         )
       ) {
-          //if we get a match, set the score
-          // use a callback function
-          //whatever the score add 4 points
-          //example of callback function passing data scope of parent to child
+        //if we get a match, set the score
+        // use a callback function
+        //whatever the score add 4 points
+        //example of callback function passing data scope of parent to child
         setScoreDisplay((score) => score + 4);
         rowOfFour.forEach(
           (square) => (currentColorArrangement[square] = blank)
@@ -104,9 +105,9 @@ const CrushBoard = () => {
             currentColorArrangement[square] === decidedColor && !isBlank
         )
       ) {
-          //if we get a match, set the score
-          // use a callback function
-          //whatever the score add 3 points
+        //if we get a match, set the score
+        // use a callback function
+        //whatever the score add 3 points
         setScoreDisplay((score) => score + 3);
         columnOfThree.forEach(
           (square) => (currentColorArrangement[square] = blank)
@@ -133,9 +134,9 @@ const CrushBoard = () => {
             currentColorArrangement[square] === decidedColor && !isBlank
         )
       ) {
-          //if we get a match, set the score
-          // use a callback function
-          //whatever the score add 3 points
+        //if we get a match, set the score
+        // use a callback function
+        //whatever the score add 3 points
         setScoreDisplay((score) => score + 3);
         rowOfThree.forEach(
           (square) => (currentColorArrangement[square] = blank)
@@ -164,7 +165,7 @@ const CrushBoard = () => {
       }
     }
   };
-    console.log("scoreDisplay here",scoreDisplay);
+  console.log("scoreDisplay here", scoreDisplay);
 
   // drag and drop functions
   // dov ref: https://www.w3schools.com/jsref/event_ondrag.asp
@@ -297,9 +298,9 @@ const CrushBoard = () => {
             onDragEnd={dragEnd}
           />
         ))}
-          </div>
-          {/** scoreboard component  */}
-          <Scoreboard score={scoreDisplay } />
+      </div>
+      {/** scoreboard component  */}
+      <Scoreboard score={scoreDisplay} />
     </div>
   );
 };
