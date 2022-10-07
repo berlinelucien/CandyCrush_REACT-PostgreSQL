@@ -1,18 +1,17 @@
-import React, { useEffect } from 'react';
 import CrushBoard from './CrushBoard'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 // this is my success page if gamer submits name
 const WelcomeMessage = ({ formInfo }) => {
   
-  const [scores, setScore] = useState([]);
-  const getScores = async () => {
-    const response = await fetch("http://localhost:4000/score");
-    const score = await response.json();
-    setScore(score)
-  };
-  useEffect(() => {
-    getScores();
-  }, []);
+  // const [scores, setScore] = useState([]);
+  // const getScores = async () => {
+  //   const response = await fetch("http://localhost:4000/score");
+  //   const score = await response.json();
+  //   setScore(score)
+  // };
+  // useEffect(() => {
+  //   getScores();
+  // }, []);
 
     
   return (
@@ -21,7 +20,7 @@ const WelcomeMessage = ({ formInfo }) => {
     <section >
          <CrushBoard />
       </section>
-      <div className='list-scores'>
+      {/* <div className='list-scores'>
         <h2> SCORE BOARD:</h2>
         <ul>
         {scores.map((score) => {
@@ -33,7 +32,7 @@ const WelcomeMessage = ({ formInfo }) => {
           )
         })}
           </ul>
-      </div>
+      </div> */}
       </div>
       
   )

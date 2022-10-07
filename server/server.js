@@ -26,7 +26,7 @@ app.get('/score', cors(), async (req, res) => {
 });
 
 // create the POST request
-app.post('/score/addscores', cors(), async (req, res) => {
+app.post('/score', cors(), async (req, res) => {
   const newScore = {
     name: req.body.name,
     score: req.body.score,
