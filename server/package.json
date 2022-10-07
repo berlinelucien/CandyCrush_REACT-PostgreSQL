@@ -14,11 +14,11 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
-    "nodemon": "^2.0.15",
     "pg-promise": "^10.11.1"
   },
   "devDependencies": {
     "eslint": "^8.11.0",
-    "eslint-plugin-react": "^7.29.4"
+    "eslint-plugin-react": "^7.29.4",
+    "nodemon": "^2.0.20"
   }
 }
